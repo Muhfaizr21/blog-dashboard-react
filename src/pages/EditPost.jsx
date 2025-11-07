@@ -1,31 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { getPost, updatePost } from "../api/posts";
+import PostForm from "../components/PostForm";
 
-export default function PostForm({ initial = { title: "", content: "" }, onSubmit, submitLabel="Save" }) {
-  const [form, setForm] = useState(initial);
+export default function EditPost() {
+  const { id } = useParams();
+  const nav = useNavigate();
+  const [post, setPost] = useState(null);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  useEffect(() => {
+    getPost(id).then(setPost).catch(() => alert('Not found'));
+  }, [id]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!form.title.trim()) return alert("Title required");
-    onSubmit(form);
+  const handleUpdate = async (data) => {
+    await updatePost(id, { ...post, ...data });
+    nav(`/posts/${id}`);
   };
 
+  if (!post) return <div>Loading...</div>;
+
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Title</label><br/>
-        <input name="title" value={form.title} onChange={handleChange} style={{ width: '100%' }}/>
-      </div>
-
-      <div style={{ marginTop: 8 }}>
-        <label>Content (Markdown)</label><br/>
-        <textarea name="content" value={form.content} onChange={handleChange} rows={10} style={{ width: '100%' }} />
-      </div>
-
-      <div style={{ marginTop: 8 }}>
-        <button type="submit">{submitLabel}</button>
-      </div>
-    </form>
+    <div>
+      <h2>Edit Post</h2>
+      <PostForm initial={{ title: post.title, content: post.content }} onSubmit={handleUpdate} submitLabel="Update"/>
+    </div>
   );
 }

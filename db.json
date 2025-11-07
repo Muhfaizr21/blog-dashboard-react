@@ -1,16 +1,10 @@
 {
   "posts": [
     {
-      "id": "1",
-      "title": "Hello World",
-      "content": "Ini post pertama. **Selamat mencoba** markdown!",
-      "createdAt": "2025-11-07T00:00:00.000Z"
-    },
-    {
-      "id": "4df5",
       "title": "dsa",
-      "content": "sada",
-      "createdAt": "2025-11-07T03:10:37.635Z"
+      "content": "1sadsa",
+      "date": "2025-11-07",
+      "id": "4df5"
     }
   ]
 }
